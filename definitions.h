@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "math.h"
+// #include "trans.h"
 
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
@@ -24,7 +25,6 @@
 
 // Max # of vertices after clipping
 #define MAX_VERTICES 8 
-
 /******************************************************
  * Types of primitives our pipeline will render.
  *****************************************************/
@@ -34,7 +34,15 @@ enum PRIMITIVES
     LINE,
     POINT
 };
-
+/****************************************************
+ * X, Y, Z, handy enums
+ ***************************************************/
+enum DIMENSION
+{
+    X = 0,
+    Y = 1,
+    Z = 2
+};
 /****************************************************
  * Describes a geometric point in 3D space. 
  ****************************************************/
@@ -45,7 +53,16 @@ struct Vertex
     double z;
     double w;
 };
-
+struct camControls
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+	double yaw = 0;
+	double roll = 0;
+	double pitch = 0;
+};
+camControls myCam;
 /******************************************************
  * BUFFER_2D:
  * Used for 2D buffers including render targets, images
@@ -229,16 +246,22 @@ class BufferImage : public Buffer2D<PIXEL>
         {
             row = 4;
             col = 4;
-            // for (int i = 0; i < 4; i++)
-            //    for (int j = 0; j < 4; i++)
-            //    {
-            //        if(i == j)
-            //        {
-            //            container[i][j] = 1;
-            //        }
-            //        else
-            //        container[i][j] = 0;
-            //    }
+           this->container[0][0] = 1;
+           this->container[1][1] = 1; 
+           this->container[2][2] = 1; 
+           this->container[0][1] = 0;
+           this->container[0][2] = 0; 
+           this->container[0][3] = 0; 
+           this->container[1][0] = 0;
+           this->container[1][2] = 0; 
+           this->container[1][3] = 0; 
+           this->container[2][0] = 0;
+           this->container[2][1] = 0; 
+           this->container[2][3] = 0; 
+           this->container[3][0] = 0;
+           this->container[3][1] = 0;
+           this->container[3][2] = 0; 
+           this->container[3][3] = 1; 
             
         }
 
@@ -307,6 +330,16 @@ class BufferImage : public Buffer2D<PIXEL>
            return (*this);
         } 
       
+       double* operator[](int i)
+       {
+           return this->container[i];
+
+       }
+       const double* operator[](int i) const
+       {
+           return this->container[i];
+
+       }
 
     };      
 
@@ -347,7 +380,104 @@ class BufferImage : public Buffer2D<PIXEL>
           v.w = (lhs.container[3][0] * rhs.x) + (lhs.container[3][1] * rhs.y)+ (lhs.container[3][2] * rhs.z)+ (lhs.container[3][3] * rhs.w);
         return v;
     }
+
+Matrix rotate4x4(const DIMENSION & dim, const double & degs)
+{
+  Matrix tr;
+  double rads = degs * M_PI / 180.0;
+  double cosT = cos(rads);
+  double sinT = sin(rads);
+
+  tr[0][0] = 1;
+  tr[0][1] = 0;
+  tr[0][2] = 0;
+  tr[0][3] = 0;
+  tr[1][0] = 0;
+  tr[1][1] = 1;
+  tr[1][2] = 0;
+  tr[1][3] = 0;
+  tr[2][0] = 0;
+  tr[2][1] = 0;
+  tr[2][2] = 1;
+  tr[2][3] = 0;
+  tr[3][0] = 0;
+  tr[3][1] = 0;
+  tr[3][2] = 0;
+  tr[3][3] = 1;
+
+  switch(dim)
+    {
+    case X:
+      tr[1][1] = cosT;
+      tr[1][2] = -sinT;
+      tr[2][1] = sinT;
+      tr[2][2] = cosT;
+      break;
+    case Y:
+      tr[0][0] = cosT;
+      tr[0][2] = sinT;
+      tr[2][0] = -sinT;
+      tr[2][2] = cosT;
+      break;
+    case Z:
+      tr[0][0] = cosT;
+      tr[0][1] = -sinT;
+      tr[1][0] = sinT;
+      tr[1][1] = cosT;
+      break;
+    }
+
+  return tr;
+}
+    Matrix perspective4x4(const double & fovYDegrees, const double & aspectRatio, 
+			 const double & near, const double & far)
+{
+		Matrix rt;
+		
+		double top = near * tan((fovYDegrees * M_PI) / 180.0 /2.0);
+		double right = aspectRatio * top;
+		
+		rt[0][0] = near / right;
+		rt[0][2] = 0;
+		rt[0][1] = 0;
+		rt[0][3] = 0;
+		
+		rt[1][0] = 0;
+		rt[1][1] = near / top;
+		rt[1][2] = 0;
+		rt[1][3] = 0;
+		
+		rt[2][0] = 0;
+		rt[2][1] = 0;
+		rt[2][2] = (far + near) / (far - near);
+		rt[2][3] = (-2 * far * near) / (far - near);
+		
+		rt[3][0] = 0;
+		rt[3][1] = 0;
+		rt[3][2] = 1;
+		rt[3][3] = 0;
+		
+		return rt;		
+}
+
+Matrix camera4x4(const double & offX, const double & offY, const double & offZ,
+					 const double & yaw, const double & pitch, const double & roll)
+{
+	Matrix trans = trans.transMatrix(-offX, -offY, -offZ);
+	Matrix rotX = rotate4x4(X, -pitch);
+	Matrix rotY = rotate4x4(Y, -yaw);
+	
+	Matrix rt = rotX * rotY * trans;
+	return rt;	
+}
     //  
+    // Combine two datatypes in one
+union attrib
+{
+  double d;
+  void* ptr;
+};
+
 /***************************************************
  * ATTRIBUTES (shadows OpenGL VAO, VBO)
  * The attributes associated with a rendered 
@@ -357,21 +487,51 @@ class BufferImage : public Buffer2D<PIXEL>
 class Attributes
 {      
     public:
-        double collector[16];
-        void* ptrImg;
-        Matrix matrix;
-
+        // Members
         PIXEL color;
+    	int numMembers = 0;
+        attrib arr[16];
+        Matrix matrix;
         // Obligatory empty constructor
-        Attributes() {}
+        Attributes() {numMembers = 0;}
 
         // Needed by clipping (linearly interpolated Attributes between two others)
-        Attributes(const Attributes & first, const Attributes & second, const double & valueBetween)
+        Attributes(const Attributes & first, const Attributes & second, const double & along)
         {
-            // Your code goes here when clipping is implemented
+				numMembers = first.numMembers;
+				for(int i = 0; i < numMembers; i++)
+				{
+					arr[i].d = (first[i].d) + ((second[i].d - first[i].d) * along);
+				}
+        }
 
+        // Const Return operator
+        const attrib & operator[](const int & i) const
+        {
+            return arr[i];
+        }
+
+        // Return operator
+        attrib & operator[](const int & i) 
+        {
+            return arr[i];
+        }
+
+        // Insert Double Into Container
+        void insertDbl(const double & d)
+        {
+            arr[numMembers].d = d;
+            numMembers += 1;
+        }
+    
+        // Insert Pointer Into Container
+        void insertPtr(void * ptr)
+        {
+            arr[numMembers].ptr = ptr;
+            numMembers += 1;
         }
 };	
+
 
 // Example of a fragment shader
 void DefaultFragShader(PIXEL & fragment, const Attributes & vertAttr, const Attributes & uniforms)
@@ -382,33 +542,33 @@ void DefaultFragShader(PIXEL & fragment, const Attributes & vertAttr, const Attr
 void ColorFragShader(PIXEL & fragment, const Attributes & vertAttr, const Attributes & uniforms)
 {
     PIXEL color = 0xff000000;
-    color += (unsigned int)(vertAttr.collector[0] *0xff) << 16;
-    color += (unsigned int)(vertAttr.collector[1] *0xff) << 8;
-    color += (unsigned int)(vertAttr.collector[2] *0xff) << 0;
+    color += (unsigned int)(vertAttr[0].d *0xff) << 16;
+    color += (unsigned int)(vertAttr[1].d *0xff) << 8;
+    color += (unsigned int)(vertAttr[2].d *0xff) << 0;
 
     fragment = color;
 }
 
 void ImageFragShader(PIXEL & fragment, const Attributes & vertAttr, const Attributes & uniforms)
 {
-    BufferImage* ptr = (BufferImage*)uniforms.ptrImg;
+    BufferImage* ptr = (BufferImage*)uniforms[0].ptr;
 
-    int x = vertAttr.collector[0] * (ptr->width() - 1);
-    int y = vertAttr.collector[1] * (ptr->height() - 1);
+    int x = vertAttr[0].d * (ptr->width() - 1);
+    int y = vertAttr[1].d * (ptr->height() - 1);
 
     fragment = (*ptr)[y][x];
 }
 
-void FragShaderNightVision(PIXEL & fragment, const Attributes & attributes, const Attributes & uniform)
-{
-    PIXEL color = 0xff000000;
-    color += (unsigned int)(attributes.collector[0] *0xbb) << 16;
-    color += (unsigned int)(attributes.collector[1] *0xff) << 8;
-    color += (unsigned int)(attributes.collector[2] *0xbb) << 0;
+// void FragShaderNightVision(PIXEL & fragment, const Attributes & attributes, const Attributes & uniform)
+// {
+//     PIXEL color = 0xff000000;
+//     color += (unsigned int)(attributes.collector[0] *0xbb) << 16;
+//     color += (unsigned int)(attributes.collector[1] *0xff) << 8;
+//     color += (unsigned int)(attributes.collector[2] *0xbb) << 0;
 
-    fragment = color;
+//     fragment = color;
 
-}
+// }
 // Frag Shader for UV without image (due to SDL2 bug?)
 // void FragShaderUVwithoutImage(PIXEL & fragment, const Attributes & attributes, const Attributes & uniform)
 // {
@@ -472,9 +632,9 @@ void DefaultVertShader(Vertex & vertOut, Attributes & attrOut, const Vertex & ve
 }
 void vShader(Vertex & vertOut, Attributes & attrOut,const Vertex & vertIn, const Attributes & vertAttr, const Attributes & uniforms)
 {
-   Matrix unif = uniforms.matrix;
-   vertOut = (unif * vertIn);
-   attrOut = vertAttr;
+//    Matrix unif = uniforms.matrix;
+//    vertOut = (unif * vertIn);
+//    attrOut = vertAttr;
 //    Matrix matrixOut = unif * vertIn; 
 // //    matrixOut * vertIn;
 //    vertOut.x = matrixOut.matrix[0][0];
@@ -484,6 +644,15 @@ void vShader(Vertex & vertOut, Attributes & attrOut,const Vertex & vertIn, const
 //    attrOut = vertAttr;
 
 }
+void vShader2(Vertex & vertOut, Attributes & attrOut,const Vertex & vertIn, const Attributes & vertAttr, const Attributes & uniforms)
+{
+    Matrix* model = (Matrix*)uniforms[1].ptr;
+    Matrix* view = (Matrix*)uniforms[2].ptr;
+    Matrix* proj = (Matrix*)uniforms[3].ptr;
+    vertOut = (*proj) * (*view) * (*model) *vertIn;
+    attrOut = vertAttr;
+}
+
 /**********************************************************
  * VERTEX_SHADER
  * Encapsulates a programmer-specified callback

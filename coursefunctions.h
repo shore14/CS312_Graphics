@@ -1,4 +1,5 @@
 #include "definitions.h"
+//#include "trans.h"
 
 #ifndef COURSE_FUNCTIONS_H
 #define COURSE_FUNCTIONS_H
@@ -174,19 +175,19 @@ void TestDrawTriangle(Buffer2D<PIXEL> & target)
         verts[2] = {50, 452, 1, 1};
         PIXEL colors1[3] = {0xffff0000, 0xffff0000, 0xffff0000};
         // Your color code goes here for 'attr'
-        attr[0].color = colors1[0];
-        attr[1].color = colors1[1];
-        attr[2].color = colors1[2];
-        DrawPrimitive(TRIANGLE, target, verts, attr);
+        // attr[0].color = colors1[0];
+        // attr[1].color = colors1[1];
+        // attr[2].color = colors1[2];
+        // DrawPrimitive(TRIANGLE, target, verts, attr);
         //green
         verts[0] = {300, 402, 1, 1};
         verts[1] = {250, 452, 1, 1};
         verts[2] = {250, 362, 1, 1};
         PIXEL colors2[3] = {0xff00ff00, 0xff00ff00, 0xff00ff00};
         // Your color code goes here for 'attr'
-        attr[0].color = colors2[0];
-        attr[1].color = colors2[1];
-        attr[2].color = colors2[2];
+        // attr[0].color = colors2[0];
+        // attr[1].color = colors2[1];
+        // attr[2].color = colors2[2];
 
         DrawPrimitive(TRIANGLE, target, verts, attr);
         //blue
@@ -195,9 +196,9 @@ void TestDrawTriangle(Buffer2D<PIXEL> & target)
         verts[2] = {350, 402, 1, 1};
         PIXEL colors3[3] = {0xff0000ff, 0xff0000ff, 0xff0000ff};
         // Your color code goes here for 'attr'
-        attr[0].color = colors3[0];
-        attr[1].color = colors3[1];
-        attr[2].color = colors3[2];
+        // attr[0].color = colors3[0];
+        // attr[1].color = colors3[1];
+        // attr[2].color = colors3[2];
 
         DrawPrimitive(TRIANGLE, target, verts, attr);
        //red 
@@ -205,10 +206,10 @@ void TestDrawTriangle(Buffer2D<PIXEL> & target)
         verts[1] = {60, 162, 1, 1};
         verts[2] = {150, 162, 1, 1};
         PIXEL colors4[3] = {0xffff0000, 0xffff0000, 0xffff0000};
-        // Your color code goes here for 'attr'
-        attr[0].color = colors4[0];
-        attr[1].color = colors4[1];
-        attr[2].color = colors4[2];
+        // // Your color code goes here for 'attr'
+        // attr[0].color = colors4[0];
+        // attr[1].color = colors4[1];
+        // attr[2].color = colors4[2];
 
         DrawPrimitive(TRIANGLE, target, verts, attr);
         //green
@@ -216,10 +217,10 @@ void TestDrawTriangle(Buffer2D<PIXEL> & target)
         verts[1] = {260, 172, 1, 1};
         verts[2] = {310, 202, 1, 1};
         PIXEL colors5[3] = {0xff00ff00, 0xff00ff00, 0xff00ff00};
-        // Your color code goes here for 'attr'
-        attr[0].color = colors5[0];
-        attr[1].color = colors5[1];
-        attr[2].color = colors5[2];
+        // // Your color code goes here for 'attr'
+        // attr[0].color = colors5[0];
+        // attr[1].color = colors5[1];
+        // attr[2].color = colors5[2];
 
         DrawPrimitive(TRIANGLE, target, verts, attr);
        //blue 
@@ -228,9 +229,9 @@ void TestDrawTriangle(Buffer2D<PIXEL> & target)
         verts[2] = {470, 252, 1, 1};
         PIXEL colors6[3] = {0xff0000ff, 0xff0000ff, 0xff0000ff};
         // Your color code goes here for 'attr'
-        attr[0].color = colors6[0];
-        attr[1].color = colors6[1];
-        attr[2].color = colors6[2];
+        // attr[0].color = colors6[0];
+        // attr[1].color = colors6[1];
+        // attr[2].color = colors6[2];
 
         DrawPrimitive(TRIANGLE, target, verts, attr);
 }
@@ -253,15 +254,15 @@ void TestDrawFragments(Buffer2D<PIXEL> & target)
         PIXEL colors[3] = {0xffff0000, 0xff00ff00, 0xff0000ff}; // Or {{1.0,0.0,0.0}, {0.0,1.0,0.0}, {0.0,0.0,1.0}}
         // Your color code goes here for 'colorAttributes'
         //add red green blue for att
-        colorAttributes[0].collector[0] = 1.0;
-        colorAttributes[1].collector[0] = 0.0;
-        colorAttributes[2].collector[0] = 0.0;
-        colorAttributes[0].collector[1] = 0.0;
-        colorAttributes[1].collector[1] = 1.0;
-        colorAttributes[2].collector[1] = 0.0;
-        colorAttributes[0].collector[2] = 0.0;
-        colorAttributes[1].collector[2] = 0.0;
-        colorAttributes[2].collector[2] = 1.0;
+        // colorAttributes[0].collector[0] = 1.0;
+        // colorAttributes[1].collector[0] = 0.0;
+        // colorAttributes[2].collector[0] = 0.0;
+        // colorAttributes[0].collector[1] = 0.0;
+        // colorAttributes[1].collector[1] = 1.0;
+        // colorAttributes[2].collector[1] = 0.0;
+        // colorAttributes[0].collector[2] = 0.0;
+        // colorAttributes[1].collector[2] = 0.0;
+        // colorAttributes[2].collector[2] = 1.0;
 
         FragmentShader myColorFragShader;
         // Your code for the color fragment shader goes here
@@ -280,12 +281,12 @@ void TestDrawFragments(Buffer2D<PIXEL> & target)
         imageTriangle[1] = {500, 252, 1, 1};
         imageTriangle[2] = {350, 252, 1, 1};
         double coordinates[3][2] = { {1,0}, {1,1}, {0,1} };
-        imageAttributes[0].collector[0] = coordinates[0][0];
-        imageAttributes[0].collector[1] = coordinates[0][1];
-        imageAttributes[1].collector[0] = coordinates[1][0];
-        imageAttributes[1].collector[1] = coordinates[1][1];
-        imageAttributes[2].collector[0] = coordinates[2][0];
-        imageAttributes[2].collector[1] = coordinates[2][1];
+        // imageAttributes[0].collector[0] = coordinates[0][0];
+        // imageAttributes[0].collector[1] = coordinates[0][1];
+        // imageAttributes[1].collector[0] = coordinates[1][0];
+        // imageAttributes[1].collector[1] = coordinates[1][1];
+        // imageAttributes[2].collector[0] = coordinates[2][0];
+        // imageAttributes[2].collector[1] = coordinates[2][1];
         // Your texture coordinate code goes here for 'imageAttributes'
 
         static BufferImage myImage("kerrigan.bmp");
@@ -293,7 +294,7 @@ void TestDrawFragments(Buffer2D<PIXEL> & target)
 
         Attributes imageUniforms;
         // Your code for the uniform goes here
-        imageUniforms.ptrImg = &myImage;
+        // imageUniforms.ptrImg = &myImage;
 
         FragmentShader myImageFragShader;
         // Your code for the image fragment shader goes here
@@ -332,33 +333,33 @@ void TestDrawPerspectiveCorrect(Buffer2D<PIXEL> & target)
 
         double coordinates[4][2] = { {0/divA,0/divA}, {1/divA,0/divA}, {1/divB,1/divB}, {0/divB,1/divB} };
         // Your texture coordinate code goes here for 'imageAttributesA, imageAttributesB'
-        imageAttributesA[0].collector[0] = coordinates[0][0];
-        imageAttributesA[0].collector[1] = coordinates[0][1];
-        imageAttributesA[1].collector[0] = coordinates[1][0];
-        imageAttributesA[1].collector[1] = coordinates[1][1];
-        imageAttributesA[2].collector[0] = coordinates[2][0];
-        imageAttributesA[2].collector[1] = coordinates[2][1];
+        // imageAttributesA[0].collector[0] = coordinates[0][0];
+        // imageAttributesA[0].collector[1] = coordinates[0][1];
+        // imageAttributesA[1].collector[0] = coordinates[1][0];
+        // imageAttributesA[1].collector[1] = coordinates[1][1];
+        // imageAttributesA[2].collector[0] = coordinates[2][0];
+        // imageAttributesA[2].collector[1] = coordinates[2][1];
 
-        imageAttributesB[0].collector[0] = coordinates[2][0];
-        imageAttributesB[0].collector[1] = coordinates[2][1];
-        imageAttributesB[1].collector[0] = coordinates[3][0];
-        imageAttributesB[1].collector[1] = coordinates[3][1];
-        imageAttributesB[2].collector[0] = coordinates[0][0];
-        imageAttributesB[2].collector[1] = coordinates[0][1]; 
+        // imageAttributesB[0].collector[0] = coordinates[2][0];
+        // imageAttributesB[0].collector[1] = coordinates[2][1];
+        // imageAttributesB[1].collector[0] = coordinates[3][0];
+        // imageAttributesB[1].collector[1] = coordinates[3][1];
+        // imageAttributesB[2].collector[0] = coordinates[0][0];
+        // imageAttributesB[2].collector[1] = coordinates[0][1]; 
 
         static BufferImage myImage("checker.bmp");
         // Ensure the checkboard image is in this directory
 
         Attributes imageUniforms;
         // Your code for the uniform goes here
-        imageUniforms.ptrImg = &myImage;
+        // imageUniforms.ptrImg = &myImage;
 
         FragmentShader fragImg;
         // Your code for the image fragment shader goes here
         fragImg.FragShader = ImageFragShader;
 
         FragmentShader frag;
-        frag.FragShader = FragShaderNightVision;
+        //frag.FragShader = FragShaderNightVision;
 
         // Draw image triangle 
         DrawPrimitive(TRIANGLE, target, verticesImgA, imageAttributesA, &imageUniforms, &fragImg);
@@ -385,15 +386,15 @@ void TestVertexShader(Buffer2D<PIXEL> & target)
 
         PIXEL colors[3] = {0xffff0000, 0xff00ff00, 0xff0000ff};
         // Your code for 'colorAttributes' goes here
-        colorAttributes[0].collector[0] = 1.0;
-        colorAttributes[1].collector[0] = 0.0;
-        colorAttributes[2].collector[0] = 0.0;
-        colorAttributes[0].collector[1] = 0.0;
-        colorAttributes[1].collector[1] = 1.0;
-        colorAttributes[2].collector[1] = 0.0;
-        colorAttributes[0].collector[2] = 0.0;
-        colorAttributes[1].collector[2] = 0.0;
-        colorAttributes[2].collector[2] = 1.0;
+        // colorAttributes[0].collector[0] = 1.0;
+        // colorAttributes[1].collector[0] = 0.0;
+        // colorAttributes[2].collector[0] = 0.0;
+        // colorAttributes[0].collector[1] = 0.0;
+        // colorAttributes[1].collector[1] = 1.0;
+        // colorAttributes[2].collector[1] = 0.0;
+        // colorAttributes[0].collector[2] = 0.0;
+        // colorAttributes[1].collector[2] = 0.0;
+        // colorAttributes[2].collector[2] = 1.0;
 
         FragmentShader myColorFragShader;
         myColorFragShader.FragShader = ColorFragShader;
@@ -453,7 +454,7 @@ void TestPipeline(Buffer2D<PIXEL> & target)
         //      1) perspective projection is expected from
         //         the programmer in the vertex shader.
         //      2) Clipping/normalization must be turned on.
-        //      3) The ViewPort Transform must be applied.
+        //      3) The ViewPort Matrix must be applied.
         //      4) The Z-Buffer is incorporated into drawing.
         //      5) You may want to involve camera variables:
         //              i)   camYaw
@@ -489,20 +490,44 @@ void TestPipeline(Buffer2D<PIXEL> & target)
 
         double coordinates[4][2] = { {0,0}, {1,0}, {1,1}, {0,1} };
         // Your texture coordinate code goes here for 'imageAttributesA, imageAttributesB'
+		imageAttributesA[0].insertDbl(coordinates[0][0]); // First group of attributes 
+		imageAttributesA[0].insertDbl(coordinates[0][1]);
+		imageAttributesA[1].insertDbl(coordinates[1][0]);
+		imageAttributesA[1].insertDbl(coordinates[1][1]);
+		imageAttributesA[2].insertDbl(coordinates[2][0]);
+		imageAttributesA[2].insertDbl(coordinates[2][1]);
+		imageAttributesB[0].insertDbl(coordinates[2][0]); // Second group of attributes
+		imageAttributesB[0].insertDbl(coordinates[2][1]);
+		imageAttributesB[1].insertDbl(coordinates[3][0]);
+		imageAttributesB[1].insertDbl(coordinates[3][1]);
+		imageAttributesB[2].insertDbl(coordinates[0][0]);
+		imageAttributesB[2].insertDbl(coordinates[0][1]);
+				
+		static BufferImage myImage("checker.bmp");
+		Attributes imageUniforms;
 
-        BufferImage myImage("checker.bmp");
-        // Ensure the checkboard image is in this directory, you can use another image though
+		Matrix model = model.transMatrix(0, 0, 0);
+		Matrix view = camera4x4(myCam.x, myCam.y, myCam.z, 
+					   myCam.yaw, myCam.pitch, myCam.roll);
+		Matrix proj = perspective4x4(60, 1.0, 1, 200);
 
-        Attributes imageUniforms;
-        // Your code for the uniform goes here
+		// Uniforms
+		// [0] -> Image reference
+		// [1] -> Model transform 
+		// [2] -> View transform 
+		
+		imageUniforms.insertPtr((void*)&myImage);
+		imageUniforms.insertPtr((void*)&model);
+		imageUniforms.insertPtr((void*)&view);
+		imageUniforms.insertPtr((void*)&proj);
 
         FragmentShader fragImg;
-        // Your code for the image fragment shader goes here
+		fragImg.FragShader = ImageFragShader;
 
         VertexShader vertImg;
-        // Your code for the image vertex shader goes here
-        // NOTE: This must include the at least the 
-        // projection matrix if not more transformations 
+		vertImg.VertShader = vShader2;
+		
+		
                 
         // Draw image triangle 
         DrawPrimitive(TRIANGLE, target, verticesImgA, imageAttributesA, &imageUniforms, &fragImg, &vertImg, &zBuf);
@@ -510,7 +535,5 @@ void TestPipeline(Buffer2D<PIXEL> & target)
 
         // NOTE: To test the Z-Buffer additinonal draw calls/geometry need to be called into this scene
 }
-
-
 
 #endif
